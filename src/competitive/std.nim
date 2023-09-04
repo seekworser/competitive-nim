@@ -32,7 +32,7 @@ when not declared COMPETITIVE_STD_HPP:
         for i in 0..<x.len:
             input(x[i])
     proc `%`*(x:int, y:int):int = ((x mod y)+y mod y)
-    proc `//`*(x:int, y:int):int =  ((x - (x%y)) div y)
+    proc `//`*(x:int, y:int):int =    ((x - (x%y)) div y)
     proc `^`*(x:int, y:int):int = x xor y
     proc `&`*(x:int, y:int):int = x and y
     proc `|`*(x:int, y:int):int = x or y
@@ -45,6 +45,7 @@ when not declared COMPETITIVE_STD_HPP:
     proc `|=`*(x:var int, y:int):void = x = x | y
     proc `>>=`*(x:var int, y:int):void = x = x >> y
     proc `<<=`*(x:var int, y:int):void = x = x << y
+    proc `[]`*(x:int,n:int):bool = (x and (1 shl n)) != 0
     proc pow*(a, n: int, m = INFL): int =
         var rev: int = 1
         var a = a
@@ -78,4 +79,16 @@ when not declared COMPETITIVE_STD_HPP:
     converter tofloat*(n:int):float = float(n)
     converter tobool*(n:int):bool = n != 0
     converter tobool*[T](a:seq[T]):bool = a.len != 0
+    iterator range*(start:int,ends:int,step:int): int =
+        var i = start
+        if step < 0:
+            while i>ends:
+                yield i
+                i += step
+        elif step > 0:
+            while i<ends:
+                yield i
+                i += step
+    iterator range*(ends:int):int=(for i in 0..<ends:yield i)
+    iterator range*(start:int,ends:int):int= (for i in start..<ends: yield i)
 
