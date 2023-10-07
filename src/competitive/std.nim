@@ -1,36 +1,61 @@
+import math, strformat, macros, strutils
 when not declared COMPETITIVE_STD_HPP:
     const COMPETITIVE_STD_HPP* = 1
-    import math
     const MODINT998244353* = 998244353
     const MODINT1000000007* = 1000000007
     let INF* = 100100111
     let INFL* = int(3300300300300300491)
-    type Float = float or float32 or float64
-    proc scanf(formatstr: cstring){.header: "<stdio.h>", varargs.}
-    proc input*(x: var int): void = scanf("%lld", addr x)
-    proc input*(x: var char): void =
-        var c: char
-        while true:
-            scanf("%c", addr c)
-            if c != ' ' and c != '\n':
-                x = c
-                break
-    proc input*(x: var Float): void = scanf("%f", addr x)
-    proc input*(x: var string): void =
-        var c: char
-        while true:
-            scanf("%c", addr c)
-            if c != ' ' and c != '\n':
-                x &= c
-                break
-        while true:
-            scanf("%c", addr c)
-            if c == ' ' or c == '\n':
-                break
-            x &= c
-    proc input*[T](x: var seq[T]): void =
-        for i in 0..<x.len:
-            input(x[i])
+    type double* = float64
+    let readNext = iterator(getsChar: bool = false): string {.closure.} =
+        for s in stdin.readAll.split:
+            if getsChar:
+                for i in 0..<s.len():
+                    yield s[i..i]
+            else:
+                yield s
+    proc input*(t: typedesc[string]): string = readNext()
+    proc input*(t: typedesc[char]): char = readNext(true)[0]
+    proc input*(t: typedesc[int]): int = readNext().parseInt
+    proc input*(t: typedesc[float]): float = readNext().parseFloat
+    macro input*(t: typedesc, n: varargs[int]): untyped =
+        var repStr = ""
+        for arg in n:
+            repStr &= &"({arg.repr}).newSeqWith "
+        parseExpr(&"{repStr}input({t})")
+    macro input*(ts: varargs[auto]): untyped =
+        var tupStr = ""
+        for t in ts:
+            tupStr &= &"input({t.repr}),"
+        parseExpr(&"({tupStr})")
+    macro input*(n: int, ts: varargs[auto]): untyped =
+        for typ in ts:
+            if typ.typeKind != ntyAnything:
+                error("Expected typedesc, got " & typ.repr, typ)
+        parseExpr(&"({n.repr}).newSeqWith input({ts.repr})")
+    proc `fmtprint`*[T](x: seq[T]): string = return x.join(" ")
+    proc `fmtprint`*(x: int or float or float32 or float64 or string or char): string = return $x
+    proc print*(prop: tuple[f: File, sepc: string, endc: string, flush: bool], args: varargs[string, `fmtprint`]) =
+        for i in 0..<len(args):
+            prop.f.write(&"{args[i]}")
+            if i != len(args) - 1: prop.f.write(prop.sepc) else: prop.f.write(prop.endc)
+        if prop.flush: prop.f.flushFile()
+    proc print*(args: varargs[string, `fmtprint`]) = print((f: stdout, sepc: " ", endc: " ", flush: false), args)
+    proc inner_debug*(x: auto) = print((f: stderr, sepc: "", endc: "", flush: true), x)
+    macro debug*(n: varargs[typed]): untyped =
+        result = newNimNode(nnkStmtList, n)
+        for i in 0..n.len-1:
+            if n[i].kind == nnkStrLit:
+                result.add(newCall("inner_debug", n[i]))
+                result.add(newCall("inner_debug", newStrLitNode(": ")))
+                result.add(newCall("inner_debug", n[i]))
+            else:
+                result.add(newCall("inner_debug", toStrLit(n[i])))
+                result.add(newCall("inner_debug", newStrLitNode(": ")))
+                result.add(newCall("inner_debug", n[i]))
+            if i != n.len-1:
+                result.add(newCall("inner_debug", newStrLitNode(", ")))
+            else:
+                result.add(newCall("inner_debug", newStrLitNode("\n")))
     proc `%`*(x:int, y:int):int = ((x mod y)+y mod y)
     proc `//`*(x:int, y:int):int =    ((x - (x%y)) div y)
     proc `^`*(x:int, y:int):int = x xor y
@@ -91,4 +116,3 @@ when not declared COMPETITIVE_STD_HPP:
                 i += step
     iterator range*(ends:int):int=(for i in 0..<ends:yield i)
     iterator range*(start:int,ends:int):int= (for i in start..<ends: yield i)
-
