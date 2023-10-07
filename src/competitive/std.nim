@@ -39,7 +39,7 @@ when not declared COMPETITIVE_STD_HPP:
             prop.f.write(&"{args[i]}")
             if i != len(args) - 1: prop.f.write(prop.sepc) else: prop.f.write(prop.endc)
         if prop.flush: prop.f.flushFile()
-    proc print*(args: varargs[string, `fmtprint`]) = print((f: stdout, sepc: " ", endc: " ", flush: false), args)
+    proc print*(args: varargs[string, `fmtprint`]) = print((f: stdout, sepc: " ", endc: "\n", flush: false), args)
     proc inner_debug*(x: auto) = print((f: stderr, sepc: "", endc: "", flush: true), x)
     macro debug*(n: varargs[typed]): untyped =
         result = newNimNode(nnkStmtList, n)
