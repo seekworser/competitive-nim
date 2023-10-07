@@ -33,7 +33,8 @@ when not declared COMPETITIVE_STD_HPP:
                 error("Expected typedesc, got " & typ.repr, typ)
         parseExpr(&"({n.repr}).newSeqWith input({ts.repr})")
     proc `fmtprint`*[T](x: seq[T]): string = return x.join(" ")
-    proc `fmtprint`*(x: int or float or float32 or float64 or string or char): string = return $x
+    proc `fmtprint`*(x: int or string or char): string = return $x
+    proc `fmtprint`*(x: float or float32 or float64): string = return &"{x:.16f}"
     proc print*(prop: tuple[f: File, sepc: string, endc: string, flush: bool], args: varargs[string, `fmtprint`]) =
         for i in 0..<len(args):
             prop.f.write(&"{args[i]}")
