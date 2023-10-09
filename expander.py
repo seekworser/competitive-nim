@@ -17,7 +17,7 @@ ATCODER_INCLUDE = re.compile(
         r'\s*(include|import)\s*([a-zA-Z0-9_,./\s"]*)\s*')
 
 WHEN_STATEMENT = re.compile(r'^\s*when\s+.*:')
-ATCODER_DIR = re.compile('^(?:competitive|atcoder|lib)\/')
+ATCODER_DIR = re.compile('^(?:competitive|lib)\/')
 INDENT_WIDTH = 2
 compress_type = "xz"  # "xz" or "bzip2" or "gzip"
 
