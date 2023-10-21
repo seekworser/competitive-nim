@@ -1,18 +1,22 @@
 import math, strformat, macros, strutils
-when not declared COMPETITIVE_STD_HPP:
-    const COMPETITIVE_STD_HPP* = 1
+when not declared COMPETITIVE_STD_STD_HPP:
+    const COMPETITIVE_STD_STD_HPP* = 1
     const MODINT998244353* = 998244353
     const MODINT1000000007* = 1000000007
     let INF* = 100100111
     let INFL* = int(3300300300300300491)
     type double* = float64
     let readNext = iterator(getsChar: bool = false): string {.closure.} =
-        for s in stdin.readAll.split:
-            if getsChar:
-                for i in 0..<s.len():
-                    yield s[i..i]
-            else:
-                yield s
+        while true:
+            var si: string
+            try: si = stdin.readLine
+            except EOFError: yield ""
+            for s in si.split:
+                if getsChar:
+                    for i in 0..<s.len():
+                        yield s[i..i]
+                else:
+                    yield s
     proc input*(t: typedesc[string]): string = readNext()
     proc input*(t: typedesc[char]): char = readNext(true)[0]
     proc input*(t: typedesc[int]): int = readNext().parseInt
@@ -57,7 +61,7 @@ when not declared COMPETITIVE_STD_HPP:
                 result.add(newCall("inner_debug", newStrLitNode(", ")))
             else:
                 result.add(newCall("inner_debug", newStrLitNode("\n")))
-    proc `%`*(x:int, y:int):int = ((x mod y)+y mod y)
+    proc `%`*(x:int, y:int):int = (((x mod y) + y) mod y)
     proc `//`*(x:int, y:int):int =    ((x - (x%y)) div y)
     proc `^`*(x:int, y:int):int = x xor y
     proc `&`*(x:int, y:int):int = x and y
@@ -117,3 +121,4 @@ when not declared COMPETITIVE_STD_HPP:
                 i += step
     iterator range*(ends:int):int=(for i in 0..<ends:yield i)
     iterator range*(start:int,ends:int):int= (for i in start..<ends: yield i)
+    let DXY* = [(0, -1), (0, 1), (-1, 0), (1, 0)]
