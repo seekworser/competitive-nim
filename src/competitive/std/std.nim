@@ -3,8 +3,8 @@ when not declared COMPETITIVE_STD_STD_HPP:
     const COMPETITIVE_STD_STD_HPP* = 1
     const MODINT998244353* = 998244353
     const MODINT1000000007* = 1000000007
-    let INF* = 100100111
-    let INFL* = int(3300300300300300491)
+    const INF* = 100100111
+    const INFL* = int(3300300300300300491)
     type double* = float64
     let readNext = iterator(getsChar: bool = false): string {.closure.} =
         while true:
@@ -119,6 +119,15 @@ when not declared COMPETITIVE_STD_STD_HPP:
             while i<ends:
                 yield i
                 i += step
-    iterator range*(ends:int):int=(for i in 0..<ends:yield i)
+    iterator range*(ends:int):int=(for i in 0..<ends: yield i)
     iterator range*(start:int,ends:int):int= (for i in start..<ends: yield i)
-    let DXY* = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+    proc yes*(b: bool = true): void = print(if b: "Yes" else: "No")
+    proc no*(b: bool = true): void = yes(not b)
+    proc yes_upper*(b: bool = true): void = print(if b: "YES" else: "NO")
+    proc no_upper*(b: bool = true): void = yes_upper(not b)
+    const DXY* = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+    const DDXY* = [(1, -1), (1, 0), (1, 1), (0, -1), (0, 1), (-1, -1), (-1, 0), (-1, 1)]
+    macro exit*(statement: untyped): untyped =
+        quote do:
+            `statement`
+            quit()
