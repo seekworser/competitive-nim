@@ -13,8 +13,7 @@ when not declared COMPETITIVE_STD_STD_HPP:
             except EOFError: yield ""
             for s in si.split:
                 if getsChar:
-                    for i in 0..<s.len():
-                        yield s[i..i]
+                    for i in 0..<s.len(): yield s[i..i]
                 else:
                     yield s
     proc input*(t: typedesc[string]): string = readNext()
@@ -46,21 +45,26 @@ when not declared COMPETITIVE_STD_STD_HPP:
         if prop.flush: prop.f.flushFile()
     proc print*(args: varargs[string, `fmtprint`]) = print((f: stdout, sepc: " ", endc: "\n", flush: false), args)
     proc inner_debug*(x: auto) = print((f: stderr, sepc: "", endc: "", flush: true), x)
+    const LOCAL_DEBUG{.booldefine.} = false
     macro debug*(n: varargs[typed]): untyped =
-        result = newNimNode(nnkStmtList, n)
-        for i in 0..n.len-1:
-            if n[i].kind == nnkStrLit:
-                result.add(newCall("inner_debug", n[i]))
-                result.add(newCall("inner_debug", newStrLitNode(": ")))
-                result.add(newCall("inner_debug", n[i]))
-            else:
-                result.add(newCall("inner_debug", toStrLit(n[i])))
-                result.add(newCall("inner_debug", newStrLitNode(": ")))
-                result.add(newCall("inner_debug", n[i]))
-            if i != n.len-1:
-                result.add(newCall("inner_debug", newStrLitNode(", ")))
-            else:
-                result.add(newCall("inner_debug", newStrLitNode("\n")))
+        when LOCAL_DEBUG:
+            result = newNimNode(nnkStmtList, n)
+            for i in 0..n.len-1:
+                if n[i].kind == nnkStrLit:
+                    result.add(newCall("inner_debug", n[i]))
+                    result.add(newCall("inner_debug", newStrLitNode(": ")))
+                    result.add(newCall("inner_debug", n[i]))
+                else:
+                    result.add(newCall("inner_debug", toStrLit(n[i])))
+                    result.add(newCall("inner_debug", newStrLitNode(": ")))
+                    result.add(newCall("inner_debug", n[i]))
+                if i != n.len-1:
+                    result.add(newCall("inner_debug", newStrLitNode(", ")))
+                else:
+                    result.add(newCall("inner_debug", newStrLitNode("\n")))
+        else:
+            return quote do:
+                discard
     proc `%`*(x:int, y:int):int = (((x mod y) + y) mod y)
     proc `//`*(x:int, y:int):int =    ((x - (x%y)) div y)
     proc `^`*(x:int, y:int):int = x xor y
@@ -77,54 +81,42 @@ when not declared COMPETITIVE_STD_STD_HPP:
     proc `<<=`*(x:var int, y:int):void = x = x << y
     proc `[]`*(x:int,n:int):bool = (x and (1 shl n)) != 0
     proc pow*(a, n: int, m = INFL): int =
-        var rev: int = 1
-        var a = a
-        var n = n
+        var
+            rev = 1
+            a = a
+            n = n
         while n > 0:
-            if n % 2 != 0:
-                rev = (rev * a) mod m
-            if n > 1:
-                a = (a * a) mod m
+            if n % 2 != 0: rev = (rev * a) mod m
+            if n > 1: a = (a * a) mod m
             n >>= 1
         return rev
     proc sqrt*(x: int): int =
         assert(x >= 0)
-        var rev = int(sqrt(float(x)))
-        while rev * rev > x:
-            rev += 1
-        while (rev+1) * (rev+1) <= x:
-            rev += 1
-        return rev
-    proc chmax*[T](x: var T, y: T): bool =
-        if x < y:
-            x = y
-            return true
-        return false
-    proc chmin*[T](x: var T, y: T): bool =
-        if x > y:
-            x = y
-            return true
-        return false
-    proc at*(x:char, a = '0'):int=int(x)-int(a)
-    converter tofloat*(n:int):float = float(n)
-    converter tobool*(n:int):bool = n != 0
-    converter tobool*[T](a:seq[T]):bool = a.len != 0
+        result = int(sqrt(float64(x)))
+        while result * result > x: result -= 1
+        while (result+1) * (result+1) <= x: result += 1
+    proc chmax*[T](x: var T, y: T): bool = (if x < y: (x = y; return true;) return false)
+    proc chmin*[T](x: var T, y: T): bool = (if x > y: (x = y; return true;) return false)
+    proc `max=`*[T](x: var T, y: T) = x = max(x, y)
+    proc `min=`*[T](x: var T, y: T) = x = min(x, y)
+    proc at*(x:char, a = '0'): int = int(x) - int(a)
+    converter tofloat*(n: int): float = float(n)
     iterator range*(start:int,ends:int,step:int): int =
         var i = start
         if step < 0:
-            while i>ends:
+            while i > ends:
                 yield i
                 i += step
         elif step > 0:
-            while i<ends:
+            while i < ends:
                 yield i
                 i += step
-    iterator range*(ends:int):int=(for i in 0..<ends: yield i)
-    iterator range*(start:int,ends:int):int= (for i in start..<ends: yield i)
-    proc yes*(b: bool = true): void = print(if b: "Yes" else: "No")
-    proc no*(b: bool = true): void = yes(not b)
-    proc yes_upper*(b: bool = true): void = print(if b: "YES" else: "NO")
-    proc no_upper*(b: bool = true): void = yes_upper(not b)
+    iterator range*(ends: int): int = (for i in 0..<ends: yield i)
+    iterator range*(start: int, ends: int): int = (for i in start..<ends: yield i)
+    proc Yes*(b: bool = true): void = print(if b: "Yes" else: "No")
+    proc Yo*(b: bool = true): void = Yes(not b)
+    proc YES_upper*(b: bool = true): void = print(if b: "YES" else: "NO")
+    proc NO_upper*(b: bool = true): void = Yes_upper(not b)
     const DXY* = [(0, -1), (0, 1), (-1, 0), (1, 0)]
     const DDXY* = [(1, -1), (1, 0), (1, 1), (0, -1), (0, 1), (-1, -1), (-1, 0), (-1, 1)]
     macro exit*(statement: untyped): untyped =
