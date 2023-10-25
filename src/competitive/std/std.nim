@@ -1,4 +1,4 @@
-import math, strformat, macros, strutils
+import math, strformat, macros, strutils, deques, heapqueue, sets, tables
 when not declared COMPETITIVE_STD_STD_HPP:
     const COMPETITIVE_STD_STD_HPP* = 1
     const MODINT998244353* = 998244353
@@ -35,9 +35,19 @@ when not declared COMPETITIVE_STD_STD_HPP:
             if typ.typeKind != ntyAnything:
                 error("Expected typedesc, got " & typ.repr, typ)
         parseExpr(&"({n.repr}).newSeqWith input({ts.repr})")
-    proc `fmtprint`*[T](x: seq[T]): string = return x.join(" ")
     proc `fmtprint`*(x: int or string or char): string = return $x
     proc `fmtprint`*(x: float or float32 or float64): string = return &"{x:.16f}"
+    proc `fmtprint`*[T](x: seq[T] or Deque[T] or HashSet[T]): string = return x.toSeq.join(" ")
+    proc `fmtprint`*[T, N](x: array[T, N]): string = return x.toSeq.join(" ")
+    proc `fmtprint`*[T](x: HeapQueue[T]): string =
+        var q = x
+        while q.len != 0:
+            result &= &"{q.pop()}"
+            if q.len != 0: result &= " "
+    proc `fmtprint`*[T](x: CountTable[T]): string =
+        result = x.pairs.toSeq.mapIt(&"{it[0]}: {it[1]}").join(" ")
+    proc `fmtprint`*[K, V](x: Table[K, V]): string =
+        result = x.pairs.toSeq.mapIt(&"{it[0]}: {it[1]}").join(" ")
     proc print*(prop: tuple[f: File, sepc: string, endc: string, flush: bool], args: varargs[string, `fmtprint`]) =
         for i in 0..<len(args):
             prop.f.write(&"{args[i]}")
