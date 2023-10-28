@@ -124,7 +124,7 @@ when not declared COMPETITIVE_STD_STD_HPP:
     iterator range*(ends: int): int = (for i in 0..<ends: yield i)
     iterator range*(start: int, ends: int): int = (for i in start..<ends: yield i)
     proc Yes*(b: bool = true): void = print(if b: "Yes" else: "No")
-    proc Yo*(b: bool = true): void = Yes(not b)
+    proc No*(b: bool = true): void = Yes(not b)
     proc YES_upper*(b: bool = true): void = print(if b: "YES" else: "NO")
     proc NO_upper*(b: bool = true): void = Yes_upper(not b)
     const DXY* = [(0, -1), (0, 1), (-1, 0), (1, 0)]
