@@ -1,4 +1,4 @@
-import math, strformat, macros, strutils, deques, heapqueue, sets, tables
+import math, strformat, macros, strutils, deques, heapqueue, sets, tables, sequtils
 when not declared COMPETITIVE_STD_STD_HPP:
     const COMPETITIVE_STD_STD_HPP* = 1
     const MODINT998244353* = 998244353
@@ -37,7 +37,7 @@ when not declared COMPETITIVE_STD_STD_HPP:
         parseExpr(&"({n.repr}).newSeqWith input({ts.repr})")
     proc `fmtprint`*(x: int or string or char): string = return $x
     proc `fmtprint`*(x: float or float32 or float64): string = return &"{x:.16f}"
-    proc `fmtprint`*[T](x: seq[T] or Deque[T] or HashSet[T]): string = return x.toSeq.join(" ")
+    proc `fmtprint`*[T](x: seq[T] or Deque[T] or HashSet[T] or set[T]): string = return x.toSeq.join(" ")
     proc `fmtprint`*[T, N](x: array[T, N]): string = return x.toSeq.join(" ")
     proc `fmtprint`*[T](x: HeapQueue[T]): string =
         var q = x
@@ -133,3 +133,9 @@ when not declared COMPETITIVE_STD_STD_HPP:
         quote do:
             `statement`
             quit()
+    proc v*[T](d1,: int, default: T = T(0)): seq[T] = newSeqWith(d1, default)
+    proc vv*[T](d1, d2: int, default: T = T(0)): seq[seq[T]] = newSeqWith(d1, newSeqWith(d2, default))
+    proc vvv*[T](d1, d2, d3: int, default: T = T(0)): seq[seq[seq[T]]] = newSeqWith(d1, newSeqWith(d2, newSeqWith(d3, default)))
+    proc vvvv*[T](d1, d2, d3, d4: int, default: T = T(0)): seq[seq[seq[seq[T]]]] = newSeqWith(d1, newSeqWith(d2, newSeqWith(d3, newSeqWith(d4, default))))
+    proc vvvvv*[T](d1, d2, d3, d4, d5: int, default: T = T(0)): seq[seq[seq[seq[seq[T]]]]] = newSeqWith(d1, newSeqWith(d2, newSeqWith(d3, newSeqWith(d4, newSeqWith(d5, default)))))
+    proc vvvvvv*[T](d1, d2, d3, d4, d5, d6: int, default: T = T(0)): seq[seq[seq[seq[seq[seq[T]]]]]] = newSeqWith(d1, newSeqWith(d2, newSeqWith(d3, newSeqWith(d4, newSeqWith(d5, newSeqWith(d6, default))))))
