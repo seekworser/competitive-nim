@@ -111,7 +111,7 @@ when not declared COMPETITIVE_STD_STD_HPP:
     proc `min=`*[T](x: var T, y: T) = x = min(x, y)
     proc at*(x:char, a = '0'): int = int(x) - int(a)
     converter tofloat*(n: int): float = float(n)
-    iterator range*(start:int,ends:int,step:int): int =
+    iterator rangeiter*(start: int, ends: int, step: int): int =
         var i = start
         if step < 0:
             while i > ends:
@@ -121,8 +121,8 @@ when not declared COMPETITIVE_STD_STD_HPP:
             while i < ends:
                 yield i
                 i += step
-    iterator range*(ends: int): int = (for i in 0..<ends: yield i)
-    iterator range*(start: int, ends: int): int = (for i in start..<ends: yield i)
+    iterator rangeiter*(ends: int): int = (for i in 0..<ends: yield i)
+    iterator rangeiter*(start: int, ends: int): int = (for i in start..<ends: yield i)
     proc Yes*(b: bool = true): void = print(if b: "Yes" else: "No")
     proc No*(b: bool = true): void = Yes(not b)
     proc YES_upper*(b: bool = true): void = print(if b: "YES" else: "NO")

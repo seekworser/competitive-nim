@@ -10,7 +10,7 @@ when not declared COMPETITIVE_MATH_INVERSION_NUMBER:
         let c = a.sorted.deduplicate(isSorted = true)
         var seg = initSegTree[int](c.len, op, e)
         var ans = 0
-        for i in range(a.len):
+        for i in rangeiter(a.len):
             var pos = c.lowerBound(a[i])
             if pos + 1 < c.len:
                 ans += seg.prod(pos+1..<c.len)
