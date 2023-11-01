@@ -5,7 +5,7 @@ description   = "Library for competitive programing language"
 license       = "CC0"
 srcDir        = "src"
 # skipDirs      = @["verify", ".verify-helper"]
-skipFiles = @["lib"]
+# skipFiles = @["lib"]
 
 backend       = "cpp"
 

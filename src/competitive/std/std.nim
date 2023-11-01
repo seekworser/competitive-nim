@@ -1,5 +1,7 @@
-import math, strformat, macros, strutils, deques, heapqueue, sets, tables, sequtils
 when not declared COMPETITIVE_STD_STD_HPP:
+    {.warning[UnusedImport]: off.}
+    {.hint[XDeclaredButNotUsed]: off.}
+    import os, algorithm, sequtils, tables, macros, std/math, sets, strutils, strformat, sugar, streams, deques, bitops, heapqueue
     const COMPETITIVE_STD_STD_HPP* = 1
     const MODINT998244353* = 998244353
     const MODINT1000000007* = 1000000007
@@ -75,14 +77,14 @@ when not declared COMPETITIVE_STD_STD_HPP:
         else:
             return quote do:
                 discard
-    proc `%`*(x:int, y:int):int = (((x mod y) + y) mod y)
+    proc `%`*(x:SomeInteger, y:SomeInteger):int = (((x mod y) + y) mod y)
     proc `//`*(x:int, y:int):int =    ((x - (x%y)) div y)
     proc `^`*(x:int, y:int):int = x xor y
     proc `&`*(x:int, y:int):int = x and y
     proc `|`*(x:int, y:int):int = x or y
     proc `>>`*(x:int, y:int):int = x shr y
     proc `<<`*(x:int, y:int):int = x shl y
-    proc `%=`*(x:var int, y:int):void = x = x % y
+    proc `%=`*(x:var SomeInteger or int64, y:SomeInteger or int64):void = x = x % y
     proc `//=`*(x:var int, y:int):void = x = x // y
     proc `^=`*(x:var int, y:int):void = x = x ^ y
     proc `&=`*(x:var int, y:int):void = x = x & y
@@ -90,6 +92,7 @@ when not declared COMPETITIVE_STD_STD_HPP:
     proc `>>=`*(x:var int, y:int):void = x = x >> y
     proc `<<=`*(x:var int, y:int):void = x = x << y
     proc `[]`*(x:int,n:int):bool = (x and (1 shl n)) != 0
+
     proc pow*(a, n: int, m = INFL): int =
         var
             rev = 1
@@ -133,7 +136,7 @@ when not declared COMPETITIVE_STD_STD_HPP:
         quote do:
             `statement`
             quit()
-    proc v*[T](d1,: int, default: T = T(0)): seq[T] = newSeqWith(d1, default)
+    proc vector*[T](d1,: int, default: T = T(0)): seq[T] = newSeqWith(d1, default)
     proc vv*[T](d1, d2: int, default: T = T(0)): seq[seq[T]] = newSeqWith(d1, newSeqWith(d2, default))
     proc vvv*[T](d1, d2, d3: int, default: T = T(0)): seq[seq[seq[T]]] = newSeqWith(d1, newSeqWith(d2, newSeqWith(d3, default)))
     proc vvvv*[T](d1, d2, d3, d4: int, default: T = T(0)): seq[seq[seq[seq[T]]]] = newSeqWith(d1, newSeqWith(d2, newSeqWith(d3, newSeqWith(d4, default))))

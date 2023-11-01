@@ -187,7 +187,7 @@ def main():
                                         s0 += l
                                         s0 += '\\n'
 
-                                url = "https://github.com/zer0-star/Nim-ACL/tree/master/src/{}".format(fname)
+                                url = "https://github.com/seekworser/competitive-nim/tree/master/src/{}".format(fname)
                                 # result.append("# see {}".format(url))
                                 if opts.directory:
                                     result.append("{} {}".format(keyword, original_fname))
